@@ -1,6 +1,6 @@
 import pytest
 from app import app, db
-from flask import url_for
+from app.models import User  # Adjust import based on your actual User model
 
 
 # -----------------------------
@@ -8,10 +8,10 @@ from flask import url_for
 # -----------------------------
 @pytest.fixture
 def client():
-    # Use Flask's test client
+    # Configure app for testing
     app.config['TESTING'] = True
-    app.config['WTF_CSRF_ENABLED'] = False  # If using Flask-WTF forms
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'  # In-memory DB for tests
+    app.config['WTF_CSRF_ENABLED'] = False
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
 
     with app.test_client() as client:
         with app.app_context():
@@ -22,35 +22,44 @@ def client():
 
 
 # -----------------------------
-# 2. Test homepage
+# 2. Pytest fixture to create a test user
+# -----------------------------
+@pytest.fixture
+def test_user(client):
+    with client.application.app_context():
+        user = User(username="testuser")
+        # Make sure to use your actual password hashing method
+        user.set_password("testpass")
+        db.session.add(user)
+        db.session.commit()
+    return user
+
+
+# -----------------------------
+# 3. Homepage tests
 # -----------------------------
 def test_homepage_redirect(client):
-    """
-    Test that '/' redirects (302) if user not logged in.
-    """
+    """Test that '/' redirects (302) if user not logged in."""
     response = client.get("/")
-    assert response.status_code == 302  # redirect to /login or another route
+    assert response.status_code == 302
 
 
 def test_homepage_follow_redirect(client):
-    """
-    Test homepage after following redirect.
-    """
+    """Test homepage after following redirect."""
     response = client.get("/", follow_redirects=True)
     assert response.status_code == 200
-    assert b"Login" in response.data or b"Welcome" in response.data  # check content
+    assert b"Login" in response.data or b"Welcome" in response.data
 
 
 # -----------------------------
-# 3. Test login functionality (example)
+# 4. Login tests
 # -----------------------------
-def test_login(client):
-    # Example: POST to login route
+def test_login_success(client, test_user):
+    """Login with correct credentials should succeed."""
     response = client.post("/login", data=dict(
         username="testuser",
         password="testpass"
     ), follow_redirects=True)
 
-    # If login successful, you should see homepage content
     assert response.status_code == 200
-    assert b"Welcome" in response.data or b"Dashboard" in response.data
+    assert b"Welcome" in response.data or b"Das
