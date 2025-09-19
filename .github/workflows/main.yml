@@ -20,7 +20,7 @@ jobs:            # 👇 What jobs should run?
           python-version: '3.11'    # Install Python 3.11
 
       - name: Install dependencies
-        run: pip install -r requirements.txt  # Install Flask, pytest
+        run: pip install -r requirement.txt  # Install Flask, pytest
 
       - name: Run tests
         run: pytest  # Run Python tests
