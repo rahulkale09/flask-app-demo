@@ -1,0 +1,26 @@
+name: Flask CI   # 👈 The workflow name
+
+on:              # 👇 When should this run?
+  push:          # When code is pushed to GitHub
+    branches: [ main ]
+  pull_request:  # When someone makes a PR
+    branches: [ main ]
+
+jobs:            # 👇 What jobs should run?
+  build-test:    # Name of the job
+    runs-on: ubuntu-latest   # Run on Linux server
+
+    steps:       # 👇 Steps to execute
+      - name: Checkout repository
+        uses: actions/checkout@v3   # Get your code
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'    # Install Python 3.11
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt  # Install Flask, pytest
+
+      - name: Run tests
+        run: pytest  # Run Python tests
