@@ -1,6 +1,5 @@
 import pytest
-from app import app, db
-from app.models import User  # Adjust import based on your actual User model
+from app import app, db, User  # Import directly from app.py
 
 
 # -----------------------------
@@ -28,7 +27,7 @@ def client():
 def test_user(client):
     with client.application.app_context():
         user = User(username="testuser")
-        # Make sure to use your actual password hashing method
+        # Use your password hashing method
         user.set_password("testpass")
         db.session.add(user)
         db.session.commit()
@@ -62,4 +61,15 @@ def test_login_success(client, test_user):
     ), follow_redirects=True)
 
     assert response.status_code == 200
-    assert b"Welcome" in response.data or b"Das
+    assert b"Welcome" in response.data or b"Dashboard" in response.data
+
+
+def test_login_fail(client):
+    """Login with wrong credentials should fail."""
+    response = client.post("/login", data=dict(
+        username="wronguser",
+        password="wrongpass"
+    ), follow_redirects=True)
+
+    assert response.status_code == 200
+    assert b"Invalid credentials" in response.data
