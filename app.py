@@ -86,5 +86,6 @@ if __name__ == "__main__":
             new_user = User(username = "admin", password = "password")
             db.session.add(new_user)
             db.session.commit()
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
+
 
