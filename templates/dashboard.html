@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2 class="mb-4">Welcome, {{ current_user.email }}</h2>
+
+<!-- Cards Row -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-bg-primary shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Users</h5>
+                <p class="card-text fs-4">120</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-bg-success shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Tasks</h5>
+                <p class="card-text fs-4">45</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-bg-warning shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Notifications</h5>
+                <p class="card-text fs-4">5</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Table Section -->
+<div class="card shadow-sm">
+    <div class="card-header bg-dark text-white">
+        Recent Activity
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Action</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>User logged in</td>
+                        <td>2025-09-21</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>New account registered</td>
+                        <td>2025-09-20</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Password changed</td>
+                        <td>2025-09-19</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
